@@ -99,10 +99,10 @@ void CORE_Process(int iArg)
 	msg("\n== GUID-Finder plug-in: v: %s - %s, By Sirmabus ==\n", MY_VERSION, __DATE__);
 	//while(_kbhit()) getchar();
 
-	if(autoIsOk())
+	if(auto_is_ok())
 	{
 		WORD wbSkipCodeAndIAT = TRUE;
-		int iUIResult = AskUsingForm_c(szMainDialog, MY_VERSION, __DATE__, &wbSkipCodeAndIAT);
+		int iUIResult = ask_form(szMainDialog, MY_VERSION, __DATE__, &wbSkipCodeAndIAT);
 		if(!iUIResult)
 		{			
 			msg(" - Canceled -\n");				
@@ -124,20 +124,20 @@ void CORE_Process(int iArg)
 			{                            
 				if(segment_t *pSegInfo = getnseg(i))
 				{
-					ea_t startEA = pSegInfo->startEA;
-					ea_t endEA   = pSegInfo->endEA;
-					char szName[128];
-					get_segm_name(pSegInfo, szName, (sizeof(szName) - 1));
+					ea_t startEA = pSegInfo->start_ea;
+					ea_t endEA   = pSegInfo->end_ea;
+					qstring szName;
+					get_visible_segm_name(&szName, pSegInfo);
 					if(szName[0] == '_') szName[0] = '.';
-					char szClass[128];
-					get_segm_class(pSegInfo, szClass, (sizeof(szClass) - 1));
+					qstring szClass;
+					get_segm_class(&szClass, pSegInfo);
 
 					// Skip code and import/export segs?
 					if(wbSkipCodeAndIAT && ((pSegInfo->type == SEG_CODE) || (pSegInfo->type == SEG_XTRN)))		
-						msg("Seg: %6s, %s, (%08X - %08X) SKIPPED\n", szName, szClass, startEA, endEA);
+						msg("Seg: %6s, %s, (%08X - %08X) SKIPPED\n", szName.c_str(), szClass.c_str(), startEA, endEA);
 					else
 					{
-						msg("Seg: %6s, %s, (%08X - %08X) ..\n", szName, szClass, startEA, endEA);
+						msg("Seg: %6s, %s, (%08X - %08X) ..\n", szName.c_str(), szClass.c_str(), startEA, endEA);
 									
 						tGUIDNODE *pNode = s_GUIDList.GetHead();
 						while(pNode)
@@ -151,14 +151,14 @@ void CORE_Process(int iArg)
 								msg("%08X %s\n", ea, pNode->szLabel);
 
 								jumpto(ea, 0);
-								autoWait();								
-								do_unknown(ea, FALSE);
+								auto_wait();
+								del_items(ea, DELIT_SIMPLE);
 								auto_mark_range(ea, (ea + sizeof(GUID)), AU_UNK);
 
 								// Place GUID struct here                             
 								if(pNode->StructID != BADADDR)
 								{
-									if(!doStruct(ea, sizeof(GUID), pNode->StructID))
+									if(!create_struct(ea, sizeof(GUID), pNode->StructID))
 										msg("  %08X *** Set struct failed! ***\n", ea);
 								}
 								
@@ -167,7 +167,7 @@ void CORE_Process(int iArg)
 								if(!set_name(ea, pNode->szLabel, NAME_FLAGS))
 								{	
 									// Can't name it if it's a tail byte (fixes hang-up bug)
-									if(isTail(getFlags(ea)))									
+									if(is_tail(get_full_flags(ea)))
 										msg("  %08X *** \"Tail\" byte here, failed to set name! ***\n", ea);									
 									else
 									{
@@ -276,10 +276,10 @@ static BOOL LoadDB()
 				{									
 					if(struc_t *ptStuctInfo = get_struc(StructID))
 					{						
-						add_struc_member(ptStuctInfo, "Data1", 0x0, dwrdflag(), NULL, 4);
-						add_struc_member(ptStuctInfo, "Data2", 0x4, wordflag(), NULL, 2);
-						add_struc_member(ptStuctInfo, "Data3", 0x6, wordflag(), NULL, 2);
-						add_struc_member(ptStuctInfo, "Data4", 0x8, byteflag(), NULL, 8);
+						add_struc_member(ptStuctInfo, "Data1", 0x0, dword_flag(), NULL, 4);
+						add_struc_member(ptStuctInfo, "Data2", 0x4, word_flag(), NULL, 2);
+						add_struc_member(ptStuctInfo, "Data3", 0x6, word_flag(), NULL, 2);
+						add_struc_member(ptStuctInfo, "Data4", 0x8, byte_flag(), NULL, 8);
 					}
 				}
 			}		

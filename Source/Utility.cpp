@@ -12,7 +12,7 @@
 // Desc: Get elapsed factional seconds
 //
 // ****************************************************************************
-ALIGN(32) TIMESTAMP GetTimeStamp() 
+TIMESTAMP GetTimeStamp() 
 {
 	LARGE_INTEGER tLarge;
 	QueryPerformanceCounter(&tLarge);
@@ -34,7 +34,7 @@ ALIGN(32) TIMESTAMP GetTimeStamp()
 // Desc: Send text to a log file.
 //
 // ****************************************************************************
-ALIGN(32) void Log(FILE *pLogFile, const char *format, ...)
+void Log(FILE *pLogFile, const char *format, ...)
 {
 	if(pLogFile && format)
 	{
@@ -53,7 +53,7 @@ ALIGN(32) void Log(FILE *pLogFile, const char *format, ...)
 }
 
 // Common hash function
-ALIGN(32) UINT DJBHash(const BYTE *pData, int iSize)
+UINT DJBHash(const BYTE *pData, int iSize)
 {
 	register UINT uHash = 5381;
 
