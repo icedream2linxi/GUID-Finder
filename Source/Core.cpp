@@ -78,7 +78,6 @@ static const char szMainDialog[] =
 	"\n\n"
 };
 
-
 // Initialize
 void CORE_Init()
 {	
@@ -94,7 +93,7 @@ void CORE_Exit()
 
 
 // Plug-in process
-void CORE_Process(int iArg)
+void CORE_Process(size_t iArg)
 {
 	msg("\n== GUID-Finder plug-in: v: %s - %s, By Sirmabus ==\n", MY_VERSION, __DATE__);
 	//while(_kbhit()) getchar();

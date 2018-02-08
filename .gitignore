@@ -1,3 +1,4 @@
+COMs/
 Release/
 Debug/
 Release64/
@@ -5,3 +6,6 @@ Debug64/
 *.plw
 *.db
 *.opendb
+*.exe
+*.iobj
+*.ipdb

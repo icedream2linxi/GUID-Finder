@@ -13,7 +13,7 @@ int idaapi IDAP_init();
 void idaapi IDAP_term();
 bool idaapi IDAP_run(size_t arg);
 extern void CORE_Init();
-extern void CORE_Process(int iArg);
+extern void CORE_Process(size_t iArg);
 extern void CORE_Exit();
 
 
@@ -24,7 +24,7 @@ char IDAP_name[] = "GUID-Finder";
 char IDAP_hotkey[] = "Alt-5"; // Preferred/default hotkey
 
 // Plug-in description block
-extern "C" ALIGN(32) plugin_t PLUGIN =
+extern "C" ALIGN(16) plugin_t PLUGIN =
 {
 	IDP_INTERFACE_VERSION,	// IDA version plug-in is written for
 	PLUGIN_UNL,				// Plug-in flags
@@ -41,7 +41,7 @@ extern "C" ALIGN(32) plugin_t PLUGIN =
 int idaapi IDAP_init()
 {
 	CORE_Init();
-	return(PLUGIN_OK);
+	return(PLUGIN_KEEP);
 }
 
 // Un-init
