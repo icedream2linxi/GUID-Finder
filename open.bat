@@ -1,7 +1,8 @@
 set CURRENT_DIR=%~dp0
-set QTDIR=%CURRENT_DIR%..\QTDIR
+set QTDIR=%CURRENT_DIR%QTDIR
 set IDADIR=%CURRENT_DIR%..\
-set IDASDK=%CURRENT_DIR%..\idasdk70\
+set IDASDK=%CURRENT_DIR%idasdk83\
 set BOOSTDIR=f:\vcpkg\installed\x64-windows\
-call "%VS140COMNTOOLS%..\..\VC\vcvarsall.bat" x86
+set VS143COMNTOOLS=c:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\
+call "%VS143COMNTOOLS%..\..\VC\Auxiliary\Build\vcvars32.bat"
 devenv "%CURRENT_DIR%Source\IDA_GUID-Finder_PlugIn.sln"

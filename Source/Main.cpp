@@ -9,7 +9,7 @@
 // Run IDA in plug-in debug mode with -z20
 
 // === Function Prototypes ===
-int idaapi IDAP_init();
+plugmod_t* idaapi IDAP_init();
 void idaapi IDAP_term();
 bool idaapi IDAP_run(size_t arg);
 extern void CORE_Init();
@@ -38,7 +38,7 @@ extern "C" ALIGN(16) plugin_t PLUGIN =
 };
 
 // Init
-int idaapi IDAP_init()
+plugmod_t* idaapi IDAP_init()
 {
 	CORE_Init();
 	return(PLUGIN_KEEP);

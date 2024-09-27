@@ -3,6 +3,9 @@ Release/
 Debug/
 Release64/
 Debug64/
+QTDIR/
+idasdk*/
+.vs/
 *.plw
 *.db
 *.opendb
