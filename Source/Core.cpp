@@ -4,8 +4,8 @@
 // Desc: GUID-Finder plug-in
 //
 // ****************************************************************************
-#include "ContainersInl.h"
 #include "stdafx.h"
+#include "ContainersInl.h"
 
 //#define SAVE_FIXED // To help sort out duplicates
 
@@ -265,19 +265,27 @@ static BOOL LoadDB()
         if (FILE* fp = qfopen(szPath, "rb"))
         {
             // Create GUID struct for this type
-            tid_t StructID = get_struc_id(aDBFile[i].pszType);
+            tid_t StructID = get_named_type_tid(aDBFile[i].pszType);
             if (StructID == BADADDR)
             {
+                tinfo_t tif;
+                tif.get_type_by_tid(StructID);
+
                 // Create it
-                if ((StructID = add_struc(BADADDR, aDBFile[i].pszType)) != BADADDR)
+                udt_type_data_t udt;
+                if (tif.create_udt(udt) && tif.set_named_type(NULL, aDBFile[i].pszType) == TERR_OK)
                 {
-                    if (struc_t* ptStuctInfo = get_struc(StructID))
-                    {
-                        add_struc_member(ptStuctInfo, "Data1", 0x0, dword_flag(), NULL, 4);
-                        add_struc_member(ptStuctInfo, "Data2", 0x4, word_flag(), NULL, 2);
-                        add_struc_member(ptStuctInfo, "Data3", 0x6, word_flag(), NULL, 2);
-                        add_struc_member(ptStuctInfo, "Data4", 0x8, byte_flag(), NULL, 8);
-                    }
+                    udt.add_member("Data1", tinfo_t(BTMT_UNSIGNED | BT_INT), 0x0);
+                    udt.add_member("Data1", tinfo_t(BTMT_UNSIGNED | BT_INT16), 0x4);
+                    udt.add_member("Data1", tinfo_t(BTMT_UNSIGNED | BT_INT16), 0x6);
+                    udt.add_member("Data1", tinfo_t(BTMT_UNSIGNED | BT_INT8), 0x8);
+                    //if (struc_t* ptStuctInfo = get_struc(StructID))
+                    //{
+                    //    add_struc_member(ptStuctInfo, "Data1", 0x0, dword_flag(), NULL, 4);
+                    //    add_struc_member(ptStuctInfo, "Data2", 0x4, word_flag(), NULL, 2);
+                    //    add_struc_member(ptStuctInfo, "Data3", 0x6, word_flag(), NULL, 2);
+                    //    add_struc_member(ptStuctInfo, "Data4", 0x8, byte_flag(), NULL, 8);
+                    //}
                 }
             }
             if (StructID == BADADDR)
