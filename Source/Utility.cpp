@@ -6,62 +6,60 @@
 // ****************************************************************************
 #include "stdafx.h"
 
-
 // ****************************************************************************
 // Func: GetTimeSamp()
 // Desc: Get elapsed factional seconds
 //
 // ****************************************************************************
-TIMESTAMP GetTimeStamp() 
+TIMESTAMP GetTimeStamp()
 {
-	LARGE_INTEGER tLarge;
-	QueryPerformanceCounter(&tLarge);
+    LARGE_INTEGER tLarge;
+    QueryPerformanceCounter(&tLarge);
 
-	static ALIGN(16) TIMESTAMP s_ClockFreq;
-	if(s_ClockFreq == 0.0)
-	{
-		LARGE_INTEGER tLarge;
-		QueryPerformanceFrequency(&tLarge);
-		s_ClockFreq = (TIMESTAMP) tLarge.QuadPart; 
-	}
-	
-	return((TIMESTAMP) tLarge.QuadPart / s_ClockFreq);
+    static ALIGN(16) TIMESTAMP s_ClockFreq;
+    if (s_ClockFreq == 0.0)
+    {
+        LARGE_INTEGER tLarge;
+        QueryPerformanceFrequency(&tLarge);
+        s_ClockFreq = (TIMESTAMP)tLarge.QuadPart;
+    }
+
+    return ((TIMESTAMP)tLarge.QuadPart / s_ClockFreq);
 }
-
 
 // ****************************************************************************
 // Func: Log()
 // Desc: Send text to a log file.
 //
 // ****************************************************************************
-void Log(FILE *pLogFile, const char *format, ...)
+void Log(FILE* pLogFile, const char* format, ...)
 {
-	if(pLogFile && format)
-	{
-		// Format string
-		va_list vl;
-        char	str[2048] = {0};
+    if (pLogFile && format)
+    {
+        // Format string
+        va_list vl;
+        char str[2048] = { 0 };
 
-		va_start(vl, format);
-		_vsnprintf(str, (sizeof(str) - 1), format, vl);
-		va_end(vl);
+        va_start(vl, format);
+        _vsnprintf(str, (sizeof(str) - 1), format, vl);
+        va_end(vl);
 
-		// Out to file
-		qfputs(str, pLogFile);
+        // Out to file
+        qfputs(str, pLogFile);
         qflush(pLogFile);
-	}
+    }
 }
 
 // Common hash function
-UINT DJBHash(const BYTE *pData, int iSize)
+UINT DJBHash(const BYTE* pData, int iSize)
 {
-	register UINT uHash = 5381;
+    register UINT uHash = 5381;
 
-	for(int i = 0; i < iSize; i++)
-	{
-		uHash = (((uHash << 5) + uHash) + (UINT) *pData);
-		pData++;
-	}
+    for (int i = 0; i < iSize; i++)
+    {
+        uHash = (((uHash << 5) + uHash) + (UINT)*pData);
+        pData++;
+    }
 
-	return(uHash);
+    return (uHash);
 }

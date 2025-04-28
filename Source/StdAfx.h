@@ -1,7 +1,7 @@
 
 #pragma once
 #define WIN32_LEAN_AND_MEAN
-#define WINVER       0x0502 // WinXP++    
+#define WINVER       0x0502 // WinXP++
 #define _WIN32_WINNT 0x0502
 
 #include <windows.h>
@@ -24,7 +24,7 @@
 #include <diskio.hpp>
 #include <funcs.hpp>
 #include <search.hpp>
-#include <struct.hpp>
+//#include <struct.hpp>
 #include <kernwin.hpp>
 #include <typeinf.hpp>
 #include <demangle.hpp>
